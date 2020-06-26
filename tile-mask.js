@@ -1,5 +1,3 @@
-//CONFIG.debug.hooks = true;
-
 'use strict';
 class TileMaskLayer extends PlaceablesLayer {
   constructor() {
@@ -31,11 +29,11 @@ class Tilemask {
             '<div class="control-icon activate-mask">\
             <img src="modules/tile-mask/images/mask.svg" width="36" height="36" title="Toggle Mask"></div>', 
             '<div class="control-icon activate-inversemask">\
-            <img src="modules/tile-inverse-mask/images/inversemask.svg" width="36" height="36" title="Toggle Inverse Mask"></div>', 
+            <img src="modules/tile-mask/images/inversemask.svg" width="36" height="36" title="Toggle Inverse Mask"></div>', 
             '<div class="control-icon radiusTool"><input id="myInputRadius" type="text" value="2" maxlength ="2" title="Circle Size"></div>',
             '<div class="control-icon blurTool"><input id="myInputBlur" type="text"  value="2" maxlength ="2" title="Blur Size"></div>',
            '<div class="control-icon activate-check">\
-            <img src="modules/tile-mask/images/check.svg" width="36" height="36" title="test"></div>'
+            <img src="modules/tile-mask/images/check.svg" width="36" height="36" title="update"></div>'
     );
     }
    
@@ -62,6 +60,7 @@ class Tilemask {
             } else { 
                 document.getElementById("myInputBlur");
                 document.getElementById("myInputRadius");
+                
             }
 
             if ( Tile.getFlag("tile-mask","normalmask")=== true && inputValues[0] >= 2 && inputValues[1] >= 2 )
@@ -70,17 +69,19 @@ class Tilemask {
                 Tile.tile._mask = null;
                 Tile.isMask = false;
                 Hooks.off("updateToken", Hooks._hooks.updateToken.find(x=>x.id===(Tile.data["_id"] + "_mask")));
-                return;
+                Tile.setFlag("tile-mask", "normalmask", true);
+                
             } else if (Tile.getFlag("tile-mask","invertmask")=== true && inputValues[0] >= 2 && inputValues[1] >= 2)
             {
-
+                Tile.children.find(x=>x.id=== Tile.data["_id"]+"_inversemask").destroy();
+                 canvas.tilemaskeffect.children.find(x=>x.id=== Tile.data["_id"]+"_maskContainer").destroy();
                 Hooks.off("updateTile", Hooks._hooks.updateTile.find(x=>x.id===(Tile.data['_id'] + '_mask')));
                 Hooks.off("updateToken", Hooks._hooks.updateToken.find(x=>x.id===(Tile.data["_id"] + "_mask")));
-                Tile.children.find(x=>x.id=== Tile.data["_id"]+"_inversemask").destroy();
-                canvas.tilemaskeffect.children.find(x=>x.id=== Tile.data["_id"]+"_maskContainer").destroy();
                 Tile.tile.visible = true; 
-                return;
-            } return;
+                Tile.setFlag("tile-mask", "invertmask", true);
+                
+                
+            } 
 
         
         });
@@ -283,23 +284,19 @@ class Tilemask {
                             if (Tile.data.flags["tile-mask"]["invertmask"]=== true){
                                 maskContainer.position.x = Tile.data.x;
                                 maskContainer.position.y = Tile.data.y; 
-//                                imgCopy.width = Tile.data.width;
-//                                imgCopy.height   = Tile.data.height;
-//                                imgCopy.x        = Tile.data.width/2 ;
-//                                imgCopy.y        = Tile.data.height/2 ;	
 
                             }
                          }
 
                     containerMove.id = Tile.data['_id'] + '_mask'; 
                     
-                    Hooks.on('updateTile', containerMove);  //add the follow token function
+                    Hooks.on('updateTile', containerMove);  
                     
                     
-                    if (game.user.isGM) maskContainer.alpha =.25 ;
+                   // if (game.user.isGM) maskContainer.alpha =.25 ;
                                          
 
-                        const maskGraphic = new PIXI.Graphics()   //The the mask object graphic -> texture -> sprite -> container = focus
+                        const maskGraphic = new PIXI.Graphics()   
 
                             .beginFill(0xFF0000)
                             .drawRect(0, 0, sqWr, sqHr)
@@ -323,60 +320,7 @@ class Tilemask {
                         Tile.tile.visible = false;
                         
 }
-/*
-                function checkFlag() {
-                    
-
-                            if(Tile.getFlag("tile-mask","invertmask")=== false && canvas.tilemaskeffect.children.find(x=>x.id=== Tile.data["_id"]+"_maskContainer") === undefined) {
-
-                                    if (Tile.data.flags["tile-mask"]["normalmask"]===true 
-                                        && Tile.tile._mask === null) {
-
-                                    return setupMask();
-                                        
-                                    }
-
-                                    else if (Tile.data.flags["tile-mask"]["normalmask"]===false 
-                                             && Tile.tile._mask === null && canvas.tilemaskeffect.children.find(x=>x.id=== Tile.data["_id"]+"_maskContainer") === undefined) { 
-
-                                    return;
-
-                                    } 
-
-                                    else if (Tile.data.flags["tile-mask"]["normalmask"]===false 
-                                    && Tile.tile._mask !== null) {
-
-                                    Tile.children.find(x => x.id === (Tile.id + "_mask")).destroy(true,true,true);
-                                    Tile.tile._mask = null;
-                                    Tile.isMask = false;
-                                    Hooks.off("updateToken", Hooks._hooks.updateToken.find(x=>x.id===(Tile.data["_id"] + "_mask")));
-                                    return;
-                                    } 
-
-                            } 
-                            else if (Tile.getFlag("tile-mask","normalmask")=== false 
-                                     && Tile.tile._mask === null
-                                    ){
-
-                                    if (Tile.data.flags["tile-mask"]["invertmask"]===true &&
-                                    canvas.tilemaskeffect.children.find(x=>x.id=== Tile.data["_id"]+"_maskContainer") === undefined ){
-
-                                    return setupInverse(); 
-
-                                    } 
-                                    else if (Tile.data.flags["tile-mask"]["invertmask"]=== false) {
-
-                                    Hooks.off("updateTile", Hooks._hooks.updateTile.find(x=>x.id===(Tile.data['_id'] + '_mask')));
-                                    Hooks.off("updateToken", Hooks._hooks.updateToken.find(x=>x.id===(Tile.data["_id"] + "_mask")));
-                                    Tile.children.find(x=>x.id=== Tile.data["_id"]+"_inversemask").destroy();
-                                    canvas.tilemaskeffect.children.find(x=>x.id=== Tile.data["_id"]+"_maskContainer").destroy();
-                                    Tile.tile.visible = true; 
-                                    }
-                                }   
-                    
-                }
-              
-*/             
+            
                 function checkFlag() {
                     
           
