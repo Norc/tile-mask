@@ -49,6 +49,8 @@ class Tilemask {
         }
       
         document.getElementById("myInputRadius").onchange = function() {myFunction()};
+        document.getElementById("myInputBlur").onchange = function() {myFunction()};
+      
             function myFunction() {
 
             var inputValues = inputSize();
