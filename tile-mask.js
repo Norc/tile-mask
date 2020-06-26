@@ -31,9 +31,8 @@ class Tilemask {
             '<div class="control-icon activate-inversemask">\
             <img src="modules/tile-mask/images/inversemask.svg" width="36" height="36" title="Toggle Inverse Mask"></div>', 
             '<div class="control-icon radiusTool"><input id="myInputRadius" type="text" value="2" maxlength ="2" title="Circle Size"></div>',
-            '<div class="control-icon blurTool"><input id="myInputBlur" type="text"  value="2" maxlength ="2" title="Blur Size"></div>',
-           '<div class="control-icon activate-check">\
-            <img src="modules/tile-mask/images/check.svg" width="36" height="36" title="update"></div>'
+            '<div class="control-icon blurTool"><input id="myInputBlur" type="text"  value="2" maxlength ="2" title="Blur Size"></div>'
+           
     );
     }
    
@@ -48,22 +47,17 @@ class Tilemask {
             var myArr = [radius, blurSize];
             return myArr;
         }
-        
-        object.find(".activate-check").click (() => { 
-            
+      
+        document.getElementById("myInputRadius").onchange = function() {myFunction()};
+            function myFunction() {
+
             var inputValues = inputSize();
-            //console.log(inputValues);
-            if (inputValues[0] >= 2 || inputValues[1] >= 2) 
-            {
+            console.log(inputValues);
                 Tile.setFlag("tile-mask", "radius", inputValues[0]);
                 Tile.setFlag("tile-mask", "blur", inputValues[1]);
-            } else { 
-                document.getElementById("myInputBlur");
-                document.getElementById("myInputRadius");
+              
                 
-            }
-
-            if ( Tile.getFlag("tile-mask","normalmask")=== true && inputValues[0] >= 2 && inputValues[1] >= 2 )
+                           if ( Tile.getFlag("tile-mask","normalmask")=== true)
             {
                 Tile.children.find(x => x.id === (Tile.data["_id"] + "_mask")).destroy(true,true,true);
                 Tile.tile._mask = null;
@@ -71,7 +65,7 @@ class Tilemask {
                 Hooks.off("updateToken", Hooks._hooks.updateToken.find(x=>x.id===(Tile.data["_id"] + "_mask")));
                 Tile.setFlag("tile-mask", "normalmask", true);
                 
-            } else if (Tile.getFlag("tile-mask","invertmask")=== true && inputValues[0] >= 2 && inputValues[1] >= 2)
+            } else if (Tile.getFlag("tile-mask","invertmask")=== true)
             {
                 Tile.children.find(x=>x.id=== Tile.data["_id"]+"_inversemask").destroy();
                  canvas.tilemaskeffect.children.find(x=>x.id=== Tile.data["_id"]+"_maskContainer").destroy();
@@ -79,13 +73,10 @@ class Tilemask {
                 Hooks.off("updateToken", Hooks._hooks.updateToken.find(x=>x.id===(Tile.data["_id"] + "_mask")));
                 Tile.tile.visible = true; 
                 Tile.setFlag("tile-mask", "invertmask", true);
-                
-                
-            } 
-
+            }               
+            }
         
-        });
-        
+     
         if(Tile.getFlag("tile-mask", "radius")) {
             var dataRadius = updateData.flags["tile-mask"]["radius"];
             var dataBlur = updateData.flags["tile-mask"]["blur"];
@@ -174,7 +165,7 @@ class Tilemask {
                 }else { 
                     blurSize = Tile.getFlag("tile-mask", "blur") * 5; } 
 
-
+                    console.log("at creation",Tile.getFlag("tile-mask", "radius"),Tile.getFlag("tile-mask", "blur"));
 
                 sqHr = (Tile.data.height + radius + (blurSize * 4) ) * 2 ;
                 sqWr = (Tile.data.width  + radius + (blurSize * 4) ) * 2 ;
