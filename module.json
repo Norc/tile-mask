@@ -1,0 +1,12 @@
+{
+	"name": "tile-mask",
+	"title": "Tile Mask Options",
+	"description": "Simple module that will allow Tiles to be masked",
+	"version": "1.0.0",
+	"minimumCoreVersion": "0.6.2",
+	"compatibleCoreVersion": "0.6.4",
+	"author": "Vincent Blackhorse",
+	"systems": ["dnd5e"],
+	"scripts": ["tile-mask.js"]
+
+}
