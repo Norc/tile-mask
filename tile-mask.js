@@ -70,7 +70,7 @@ class Tilemask {
             } else if (Tile.getFlag("tile-mask","invertmask")=== true)
             {
                 Tile.children.find(x=>x.id=== Tile.data["_id"]+"_inversemask").destroy();
-                 canvas.tilemaskeffect.children.find(x=>x.id=== Tile.data["_id"]+"_maskContainer").destroy();
+                canvas.tilemaskeffect.children.find(x=>x.id=== Tile.data["_id"]+"_maskContainer").destroy();
                 Hooks.off("updateTile", Hooks._hooks.updateTile.find(x=>x.id===(Tile.data['_id'] + '_mask')));
                 Hooks.off("updateToken", Hooks._hooks.updateToken.find(x=>x.id===(Tile.data["_id"] + "_mask")));
                 Tile.tile.visible = true; 
@@ -95,12 +95,12 @@ class Tilemask {
 
             Tile.setFlag("tile-mask", "normalmask", true);
             Tile.setFlag("tile-mask", "invertmask", false)
-                console.log("setting flag to true");
+                
 
             } else {
             Tile.setFlag("tile-mask", "normalmask", false);
             Tile.setFlag("tile-mask", "invertmask", false)   
-                console.log("setting  flag to false");
+                
             }
 
         }); 
@@ -112,12 +112,12 @@ class Tilemask {
 
             Tile.setFlag("tile-mask", "invertmask", true);
             Tile.setFlag("tile-mask", "normalmask", false);
-                console.log("setting  inverse flag to true");
+                
 
             }else{
             Tile.setFlag("tile-mask", "invertmask", false);
             Tile.setFlag("tile-mask", "normalmask", false);  
-                 console.log("setting  inverse flag to false");
+                 
             }
                                                                            
         }); 
@@ -167,7 +167,7 @@ class Tilemask {
                 }else { 
                     blurSize = Tile.getFlag("tile-mask", "blur") * 5; } 
 
-                    console.log("at creation",Tile.getFlag("tile-mask", "radius"),Tile.getFlag("tile-mask", "blur"));
+                    
 
                 sqHr = (Tile.data.height + radius + (blurSize * 4) ) * 2 ;
                 sqWr = (Tile.data.width  + radius + (blurSize * 4) ) * 2 ;
@@ -180,8 +180,7 @@ class Tilemask {
                         var Tokens = canvas.tokens.ownedTokens;
                         for (var i = 0; i<Tokens.length;i++) {
                             var tokensOwned = Tokens[i];
-                            //let gridSize = scene.data.grid;
-                           // var  hehe = canvas.tilemaskeffect.children.find(x=>x.id===Tile.data["_id"]+"_maskContainer");
+
                             
                                          
                             if (Tile.data.flags["tile-mask"]["normalmask"]===true) {
@@ -198,13 +197,13 @@ class Tilemask {
                                      tokensOwned.data.y < Tile.data.y - ((radius + (blurSize/4)) * 1.3) || 
                                      tokensOwned.data.y > Tile.data.y + ((sqHr / 2) -( radius + blurSize ))
                                    ){
-                                //console.log("xData",xData, yData, "Tiledata",Tile.data.x,Tile.data.y);
+
 
                                         if (maskObject.position.x !== Tile.data.x ||
                                             maskObject.position.y !== Tile.data.y) {
                                                 maskObject.position.x = 0;
                                                 maskObject.position.y = 0;
-                                           // if  (!game.user.isGM)  hehe.alpha = 1;
+                                           // if  (!game.user.isGM)  containerObject.alpha = 1;
                                         }
                                     
                                 } else {  
@@ -214,7 +213,7 @@ class Tilemask {
                                         //console.log("app data", gridSize);
                                         maskObject.position.x = (-(sqWr / 2)  - Tile.x)+ tokensOwned.data.x + (gridSize * .5);      
                                         maskObject.position.y = (-(sqHr / 2)  - Tile.y)+ tokensOwned.data.y + (gridSize * .5);  
-                                        //if (!game.user.isGM) hehe.alpha = 0.5;
+                                        //if (!game.user.isGM) containerObject.alpha = 0.5;
                                     } 
 
                                 }
