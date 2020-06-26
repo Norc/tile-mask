@@ -399,30 +399,34 @@ if (Tile.getFlag("tile-mask","invertmask")=== true && canvas.tilemaskeffect.chil
 });
 
 Hooks.once("updateScene", () => {
-   
-    
+
+    function removeDuplicates(arr){      
+      var unique_array = [];
+      for(var i = 0;i < arr.length; i++){          
+        if(unique_array.indexOf(arr[i]) == -1){              
+          unique_array.push(arr[i])
+        }       
+        }
+      return unique_array
+    }
 
     if (Hooks._hooks.updateToken) {
     var updateTokenArr = Hooks._hooks.updateToken;
-    function removeDuplicates(arr){
-        
-        var unique_array = [];
-        for(let i = 0;i < arr.length; i++){
-            
-            if(unique_array.indexOf(arr[i]) == -1){
-                
-                unique_array.push(arr[i])
-            }
-        }
-        return unique_array
-    }
     var x = removeDuplicates(updateTokenArr);
-    for (var i = 0; i<x.length;i++) {
-        
-        Hooks.off( "updateToken", x[i]);
-        
+      for (var i = 0; i<x.length;i++) {     
+        Hooks.off( "updateToken", x[i]);      
+      }
     }
-}
+    if(Hooks._hooks.updateTile){
+    var updateTilearr = Hooks._hooks.updateTile;
+    var y = removeDuplicates(updateTilearr);
+      for (var i = 0; i< y.length;i++) {     
+        Hooks.off( "updateTile", y[i]);      
+      }  
+
+    }
+    
+
 });
 //console.trace("Tracing this function");   
 console.log("Tile Mask Icon Loaded");
